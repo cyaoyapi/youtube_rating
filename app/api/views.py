@@ -14,7 +14,7 @@ class VideoViewSet(viewsets.ModelViewSet):
     authentication_classes = (authentication.TokenAuthentication, )
     permission_classes = (permissions.AllowAny,)
 
-    @decorators.action(method=['PUT'], detail=True)
+    @decorators.action(methods=['PUT'], detail=True)
     def rate_video(self, request, pk=None):
         if 'stars' in request.data:
             video = Video.objects.get(id=pk)
