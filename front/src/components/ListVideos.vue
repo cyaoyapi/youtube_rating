@@ -7,22 +7,31 @@
             <div v-for="video in videos" :key="video.id">
               <h4>{{ video.title }}</h4>
               <p>Rating : {{ video.ratings_average }}</p>
-              <p></p>{{ video.comments_list }}</p>
-              <button class="btn-sm btn-primary mt-2 mb-3">Details</button>
+              <button class="btn-sm btn-primary mt-2 mb-3" @click="getVideoDetails(video)">Details</button>
             </div>
+      </div>
+      <div class="col-md-7">
+        <DetailsVideo :videoToDisplay="videoDetails"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios' ;
+import DetailsVideo from './DetailsVideo' ;
 
 export default {
   name: 'ListVideos',
+  components: {
+    DetailsVideo
+  },
   data() {
     return {
-      videos: []
+      videos: [],
+      videoDetails: {
+        id: "None"
+      },
     }
   },
   methods: {
@@ -30,6 +39,9 @@ export default {
       axios.get('http://127.0.0.1:8000/api/videos/')
       .then(res => (this.videos = res.data))
       .catch(err => console.log(err)) ;
+    },
+    getVideoDetails(video) {
+      this.videoDetails = video ;
     }
   },
   created(){
