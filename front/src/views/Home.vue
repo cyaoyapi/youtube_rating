@@ -1,18 +1,32 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ListVideos />
+    <button @click="getVideos">Get videos</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ListVideos from '@/components/ListVideos.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    ListVideos
+  },
+  data() {
+    return {
+      videos: []
+    }
+  },
+  methods: {
+    getVideos() {
+      axios.get('http://127.0.0.1:8000/videos/')
+      .then(res => (this.videos = res.data))
+      .catch(err => console.log(err)) ;
+      console.log(this.videos) ;
+    }
   }
 }
 </script>
