@@ -7,6 +7,7 @@
             <div v-for="video in videos" :key="video.id">
               <h4>{{ video.title }}</h4>
               <p>Rating : {{ video.ratings_average }}</p>
+              <p></p>{{ video.comments_list }}</p>
               <button class="btn-sm btn-primary mt-2 mb-3">Details</button>
             </div>
       </div>

@@ -22,6 +22,11 @@ class Video(models.Model):
             return sum / len(ratings)
         else:
             return 0
+    
+    def comments_list(self):
+        """ Return the list of comments """ 
+
+        return [rating.comments for rating in Rating.objects.filter(video=self)]
         
 
 class Rating(models.Model):
