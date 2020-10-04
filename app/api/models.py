@@ -8,7 +8,7 @@ class Video(models.Model):
 
     title = models.CharField(max_length=80)
     description = models.TextField(max_length=300)
-    url = models.URLField(max_length=200)
+    url = models.URLField()
     category = models.CharField(max_length=50)
     subcategory = models.TextField(max_length=50)
     author = models.TextField(max_length=50)

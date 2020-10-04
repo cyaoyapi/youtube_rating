@@ -1,7 +1,7 @@
 <template>
     <div class="row">
-        <div v-if="videoToDisplay.id === 'None'" >
-            <p class="text-warning">Aucune vidéo n'est selectionnée</p>
+        <div v-if="videoToDisplay.id === 'None'" class="col">
+            <p class="text-warning text-center">Aucune vidéo n'est selectionnée</p>
         </div>
         <div v-else class="col">
             <p><strong>Title</strong> : {{ videoToDisplay.title }}</p>

@@ -1,30 +1,49 @@
 <template>
-  <div class="">
+  <div class="container  nicefont">
+    <h1>Welcome to youtube rater</h1>
+    <hr>
     <div class="row">
-      <div class="col-md-5 text-center nicefont">
-            <h1>Welcome to youtube videos rating</h1>
-            <hr>
-            <div v-for="video in videos" :key="video.id">
-              <h4>{{ video.title }}</h4>
-              <p>Rating : {{ video.ratings_average }}</p>
-              <button class="btn-sm btn-primary mt-2 mb-3" @click="getVideoDetails(video)">Details</button>
-            </div>
+      <div class="col-md-5 text-center border-right">
+            <h2>List of videos</h2>
+            <p class="text-right">
+              <b-button v-b-modal.new-video variant="primary">Add new video</b-button>
+            </p>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Title</th>
+                  <th>Rating average</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="video in videos" :key="video.id">
+                  <td class="text-left">{{ video.title }}</td>
+                  <td>{{ video.ratings_average }}</td>
+                  <td><button class="btn-sm btn-primary mt-2 mb-3" @click="getVideoDetails(video)">Details</button></td>
+                </tr>
+              </tbody>
+            </table>
       </div>
-      <div class="col-md-7">
-        <DetailsVideo :videoToDisplay="videoDetails"/>
+      <div class="col-md-7 p-5">
+        <h2>Selected video details</h2>
+        <DetailsVideo :videoToDisplay="videoDetails" />
       </div>
     </div>
+    <CreateVideo />
   </div>
 </template>
 
 <script>
 import axios from 'axios' ;
 import DetailsVideo from './DetailsVideo' ;
+import CreateVideo from './CreateVideo' ;
 
 export default {
   name: 'ListVideos',
   components: {
-    DetailsVideo
+    DetailsVideo,
+    CreateVideo
   },
   data() {
     return {
@@ -57,4 +76,5 @@ export default {
 .nicefont {
   font-family: 'Mukta', sans-serif;
 }
+
 </style>
