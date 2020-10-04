@@ -30,7 +30,7 @@
         <DetailsVideo :videoToDisplay="videoDetails" />
       </div>
     </div>
-    <CreateVideo />
+    <CreateVideo @update-list-videos="updateListVideos" />
   </div>
 </template>
 
@@ -61,6 +61,13 @@ export default {
     },
     getVideoDetails(video) {
       this.videoDetails = video ;
+    },
+    updateListVideos() {
+      this.timer = setTimeout(() => {
+      axios.get('http://127.0.0.1:8000/api/videos/')
+      .then(res => (this.videos = res.data))
+      .catch(err => console.log(err)) ;
+      }, 600) ;
     }
   },
   created(){

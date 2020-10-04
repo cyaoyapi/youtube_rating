@@ -1,6 +1,7 @@
 <template>
-    <b-modal id="new-video" title="Add new video" hide-footer>
-        <b-form @submit.prevent="onSubmit" @reset.prevent="onReset">
+    <b-modal id="new-video" ref="new-video" title="Add new video" hide-footer>
+        <p class="text-success">{{ controlMessage }}</p>
+        <b-form @submit.prevent="onSubmit" @submit="$emit('update-list-videos')" @reset.prevent="onReset">
             <b-form-group
                 id="group-1"
                 label="Title:"
@@ -12,7 +13,8 @@
                 v-model="form.title"
                 type="text"
                 required
-                placeholder="Enter the video title"
+                placeholder="Enter the video title" 
+                @focus="resetControlMessage"
                 ></b-form-input>
             </b-form-group>
 
@@ -111,17 +113,21 @@ export default {
             { value: 'Programming', text: 'Programming' },
             { value: 'Data Science', text: 'Data Science' },
         ],
-
+        controlMessage: '',
       }
   },
   methods: {
       onSubmit() {
         console.log("Submit form") ;
         axios.post('http://127.0.0.1:8000/api/videos/', this.form)
-        .then(res => console.log(res))
+        .then(res => {
+            console.log(res) ;
+            this.onReset();
+            this.controlMessage = 'Video successfully added' ;
+        })
         .catch(err => console.log(err)) ;
       },
-      onReset(evt) {
+      onReset() {
         this. form = {
               title: '',
               description: '',
@@ -130,6 +136,9 @@ export default {
               subcategory: '',
               author: ''
         }
+      },
+      resetControlMessage(){
+          this.controlMessage = '' ;
       }
   }
 }
