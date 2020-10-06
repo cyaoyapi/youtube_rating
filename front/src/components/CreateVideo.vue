@@ -95,6 +95,7 @@
 
 <script>
 import axios from 'axios' ;
+import Helper from '../helper/helper.js' ;
 
 export default {
   name: 'CreateVideo',
@@ -119,7 +120,7 @@ export default {
   methods: {
       onSubmit() {
         console.log("Submit form") ;
-        axios.post('http://127.0.0.1:8000/api/videos/', this.form)
+        axios.post(`${Helper.apiURL}/api/videos/`, this.form)
         .then(res => {
             console.log(res) ;
             this.onReset();

@@ -18,7 +18,7 @@
             <b-form-input type="password" size="sm" class="mr-sm-2" placeholder="Password" v-model="form.password"></b-form-input>
             <b-button size="sm" class="my-2 my-sm-0" type="submit">Login</b-button>
             </b-nav-form>
-            <b-button v-else size="sm" class="my-2 my-sm-0" type="button" @click="logout">Logout</b-button>
+            <b-button v-else size="sm" class="my-2 my-sm-0" @click="logout">Logout</b-button>
         </b-navbar-nav>
         </b-collapse>
     </b-navbar>
@@ -27,6 +27,8 @@
 
 <script>
 import axios from 'axios' ;
+import Helper from '../helper/helper.js' ;
+import { mapState, mapActions } from 'vuex' ;
 
 export default {
   name: 'Header',
@@ -35,22 +37,25 @@ export default {
           form: {
               username : '',
               passord: ''
-          },
-          token: localStorage.getItem('user-token') || null,
+          }
       }
   },
+  computed: {
+      ...mapState(['token'])
+  },
   methods: {
+      ...mapActions(['updateToken']),
       login(){
-          axios.post('http://127.0.0.1:8000/auth/', this.form)
+          axios.post(`${Helper.apiURL}/auth/`, this.form)
           .then(res => {
               localStorage.setItem('user-token', res.data.token) ;
-              this.token = localStorage.getItem('user-token') ;
+              this.updateToken(localStorage.getItem('user-token'));
           })
           .catch(err => console.log(err))
       },
       logout(){
             localStorage.removeItem('user-token') ;
-            this.token = null ;
+            this.updateToken(null);
       }
   }
 }

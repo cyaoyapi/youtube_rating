@@ -27,7 +27,7 @@
       </div>
       <div class="col-md-7 p-5">
         <h2>Selected video details</h2>
-        <DetailsVideo :videoToDisplay="videoDetails" />
+        <DetailsVideo :videoToDisplay="videoDetails" @update-list-videos="updateListVideos" @reset-details-video="resetDetailsVideo" />
       </div>
     </div>
     <CreateVideo @update-list-videos="updateListVideos" />
@@ -36,6 +36,7 @@
 
 <script>
 import axios from 'axios' ;
+import Helper from '../helper/helper.js' ;
 import DetailsVideo from './DetailsVideo' ;
 import CreateVideo from './CreateVideo' ;
 
@@ -55,16 +56,21 @@ export default {
   },
   methods: {
     getVideos() {
-      axios.get('http://127.0.0.1:8000/api/videos/')
+      axios.get(`${Helper.apiURL}/api/videos/`)
       .then(res => (this.videos = res.data))
       .catch(err => console.log(err)) ;
     },
     getVideoDetails(video) {
       this.videoDetails = video ;
     },
+    resetDetailsVideo() {
+      this.videoDetails = {
+        id: "None"
+      }
+    },
     updateListVideos() {
       this.timer = setTimeout(() => {
-      axios.get('http://127.0.0.1:8000/api/videos/')
+      axios.get(`${Helper.apiURL}/api/videos/`)
       .then(res => (this.videos = res.data))
       .catch(err => console.log(err)) ;
       }, 600) ;
