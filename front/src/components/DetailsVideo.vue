@@ -15,7 +15,7 @@
             <ul>
                 <li v-for="[key, text] in Object.entries(videoToDisplay.comments_list)" :key="key">{{ text }}</li>
             </ul>
-            <b-form @submit="giveRating" @reset="onReset">
+            <b-form @submit.prevent="giveRating(videoToDisplay.id)" v-if="token !== null">
                 <legend>Rate this video</legend>
                 <b-form-group
                     id="input-group-1"
@@ -41,13 +41,14 @@
                 </b-form-group>
                 <b-button type="submit" variant="primary">Give rating</b-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </b-form>
-            <hr>
-            Clic here <b-button v-if="token !== null" 
-                size="sm" class="btn btn-danger my-2 my-sm-0" 
+            <hr v-if="token !== null">
+            <div v-if="token !== null">
+            Clic here <b-button  size="sm" 
+                class="btn btn-danger my-2 my-sm-0" 
                 type="button"
                 @click="deleteVideo(videoToDisplay.id)">
                 Delete
-            </b-button> to delete this video !
+            </b-button> to delete this video !</div>
         </div>
     </div>
 </template>
@@ -79,18 +80,28 @@ export default {
   },
   methods: {
       deleteVideo(id){
-          axios.delete(`${Helper.apiURL}/api/videos/${id}`, axiosConfig)
+          axios.delete(`${Helper.apiURL}/api/videos/${id}`, this.axiosConfig)
           .then(res => {
               this.$emit('update-list-videos') ;
               this.$emit('reset-details-video') ; 
           })
           .catch(err => console.log(err)) ;
       },
-      giveRating(){
+      giveRating(id){
 
+          axios.post(`${Helper.apiURL}/api/videos/${id}/rate_video/`, this.form, this.axiosConfig)
+          .then(res => {
+              this.$emit('update-list-videos') ;
+              this.$emit('update-details-video', { videoId: this.videoToDisplay.id }) ;
+              this.onReset() ;
+          })
+          .catch(err => console.log(err)) ;
       },
       onReset(){
-
+          this.form = {
+              stars: null,
+              comments: ''
+          }
       }
   }
 }

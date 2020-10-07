@@ -27,7 +27,11 @@
       </div>
       <div class="col-md-7 p-5">
         <h2>Selected video details</h2>
-        <DetailsVideo :videoToDisplay="videoDetails" @update-list-videos="updateListVideos" @reset-details-video="resetDetailsVideo" />
+        <DetailsVideo ref="videoDetails" 
+        :videoToDisplay="videoDetails" 
+        @update-list-videos="updateListVideos" 
+        @reset-details-video="resetDetailsVideo" 
+        @update-details-video="updateDetailsVideo" />
       </div>
     </div>
     <CreateVideo @update-list-videos="updateListVideos" />
@@ -62,19 +66,27 @@ export default {
     },
     getVideoDetails(video) {
       this.videoDetails = video ;
+      this.$refs.videoDetails.onReset() ;
     },
     resetDetailsVideo() {
       this.videoDetails = {
         id: "None"
       }
     },
+    updateDetailsVideo(payload) {
+      axios.get(`${Helper.apiURL}/api/videos/${payload.videoId}`)
+      .then(res => {
+        this.videoDetails = res.data ;
+      })
+      .catch(err => console.log(err)) ;
+    },
     updateListVideos() {
       this.timer = setTimeout(() => {
       axios.get(`${Helper.apiURL}/api/videos/`)
       .then(res => (this.videos = res.data))
       .catch(err => console.log(err)) ;
-      }, 600) ;
-    }
+      }, 100) ;
+    }  
   },
   created(){
     this.getVideos() ;
