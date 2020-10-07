@@ -5,15 +5,21 @@
         </div>
         <div v-else class="col">
             <p><strong>Title</strong> : {{ videoToDisplay.title }}</p>
+            <b-embed
+                type="iframe"
+                aspect="16by9"
+                :src="videoToDisplay.url"
+                allowfullscreen
+            ></b-embed>            
             <p><strong>Url</strong> : {{ videoToDisplay.url }}</p>
             <p><strong>Author</strong> : {{ videoToDisplay.author }}</p>
             <p><strong>Description</strong> : {{ videoToDisplay.description }}</p>
             <p><strong>Category</strong> : {{ videoToDisplay.category }}</p>
             <p><strong>Subcategory</strong> : {{ videoToDisplay.subcategory }}</p>
-            <p><strong>Rating average </strong> : {{ videoToDisplay.ratings_average }}</p>
-            <p><strong>Comments</strong> : </p>
-            <ul>
-                <li v-for="[key, text] in Object.entries(videoToDisplay.comments_list)" :key="key">{{ text }}</li>
+            <p v-if="videoToDisplay.ratings_average > 0"><strong>Rating average </strong> : {{ videoToDisplay.ratings_average }}</p>
+            <p v-if="videoToDisplay.comments_list.length > 0"><strong>Comments</strong> : </p>
+            <ul v-if="videoToDisplay.comments_list.length > 0">
+                <li v-for="[key, obj_comment] in Object.entries(videoToDisplay.comments_list)" :key="key" class="text-left"><strong>{{ obj_comment.username }}</strong> => Stars : {{ obj_comment.stars }} => <q>{{ obj_comment.comment }}</q></li>
             </ul>
             <b-form @submit.prevent="giveRating(videoToDisplay.id)" v-if="token !== null">
                 <legend>Rate this video</legend>

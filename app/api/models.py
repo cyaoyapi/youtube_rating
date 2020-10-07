@@ -26,7 +26,7 @@ class Video(models.Model):
     def comments_list(self):
         """ Return the list of comments """ 
 
-        return [rating.comments for rating in Rating.objects.filter(video=self)]
+        return [{'username': rating.user.username, 'stars': rating.stars, 'comment': rating.comments} for rating in Rating.objects.filter(video=self)]
         
 
 class Rating(models.Model):
